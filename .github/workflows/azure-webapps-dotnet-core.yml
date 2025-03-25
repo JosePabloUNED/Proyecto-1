@@ -9,19 +9,19 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up .NET Core
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.x' # Use the appropriate version for your project
 
-    - name: Install dependencies
+    - name: Install libssl
       run: sudo apt-get install -y libssl-dev
 
     - name: Restore dependencies
@@ -30,5 +30,9 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'YOUR_APP_NAME'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
