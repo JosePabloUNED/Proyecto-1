@@ -31,7 +31,7 @@ import { env } from 'process';
 // }
 
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:5148';
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost: ';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -40,15 +40,42 @@ export default defineConfig({
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
-    },
+    }, //5148
     server: {
         proxy: {
             '^/weatherforecast': {
                 target,
                 secure: false
-            }
+            },
+
+            '^/pingauth': {
+                target,
+                secure: false
+            },
+
+
+            '^/register': {
+                target,
+                secure: false
+            },
+
+            '^/login': {
+                target,
+                secure: false
+            },
+
+            '^/logout': {
+                target,
+                secure: false
+            },
+
+
+
+
+
+
         },
-        port: 5173,
+        port: 5174,
         https: false // Disable HTTPS
     }
 });

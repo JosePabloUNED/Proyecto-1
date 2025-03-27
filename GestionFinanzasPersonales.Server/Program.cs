@@ -1,6 +1,8 @@
 using GestionFinanzasPersonales.Server.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using System.Security.Claims;
 
 namespace GestionFinanzasPersonales.Server
 {
@@ -23,7 +25,6 @@ namespace GestionFinanzasPersonales.Server
             builder.Services.AddIdentityApiEndpoints<Tbfpuser>()
                 .AddEntityFrameworkStores<FinanzasPersonalesContext>();
 
-            // Add the Open API document generation services
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
@@ -39,6 +40,23 @@ namespace GestionFinanzasPersonales.Server
             app.MapFallbackToFile("/index.html");
 
             app.MapIdentityApi<Tbfpuser>();
+
+            app.MapPost("/logout", async (SignInManager<Tbfpuser> signInManager) =>
+            {
+
+                await signInManager.SignOutAsync();
+                return Results.Ok();
+
+            }).RequireAuthorization();
+
+
+            app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+            {
+                var email = user.FindFirstValue(ClaimTypes.Email); // get the user's email from the claim
+                return Results.Json(new { Email = email }); ; // return the email as a plain text response
+            }).RequireAuthorization();
+
+
             app.MapStaticAssets();
             app.MapOpenApi();
             app.MapScalarApiReference(options =>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
                     <th>Summary</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody> 
                 {forecasts.map(forecast =>
                     <tr key={forecast.date}>
                         <td>{forecast.date}</td>
@@ -33,7 +33,7 @@ function App() {
 
     return (
         <div>
-        <h1>HOLA MUNDO m�gico</h1>
+        <h1>HOLA MUNDO ñitó</h1>
             <h1 id="tableLabel">Weather forecast</h1>
             <p>This component demonstrates fetching data from the server.</p>
             {contents}
