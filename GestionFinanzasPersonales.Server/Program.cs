@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 
+
 namespace GestionFinanzasPersonales.Server
 {
     public class Program
@@ -21,8 +22,11 @@ namespace GestionFinanzasPersonales.Server
             builder.Services.AddDbContext<FinanzasPersonalesContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL"));
-            }); 
+            });
 
+            builder.Services.AddAuthorization();
+           // builder.Services.AddIdentityApiEndpoints<Tbfpuser>()
+             //   .AddEntityFrameworkStores<FinanzasPersonalesContext>();
 
             var app = builder.Build();
 
