@@ -185,11 +185,11 @@ public partial class FinanzasPersonalesContext : DbContext
 
         modelBuilder.Entity<Tbfpuser>(entity =>
         {
-            entity.HasKey(e => e.IdUser);
+            entity.HasKey(e => e.Id);
 
             entity.ToTable("TBFPUser");
 
-            entity.Property(e => e.IdUser)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id_user");
             entity.Property(e => e.DateRegistration)
@@ -199,7 +199,7 @@ public partial class FinanzasPersonalesContext : DbContext
                 .HasMaxLength(150)
                 .IsUnicode(false)
                 .HasColumnName("email");
-            entity.Property(e => e.Password)
+            entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("password");

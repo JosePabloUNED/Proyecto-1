@@ -1,9 +1,6 @@
-
 using GestionFinanzasPersonales.Server.Models;
 using Microsoft.EntityFrameworkCore;
-
-
-
+using Scalar.AspNetCore;
 
 namespace GestionFinanzasPersonales.Server
 {
@@ -14,38 +11,44 @@ namespace GestionFinanzasPersonales.Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
             builder.Services.AddDbContext<FinanzasPersonalesContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL"));
             });
 
             builder.Services.AddAuthorization();
-           // builder.Services.AddIdentityApiEndpoints<Tbfpuser>()
-             //   .AddEntityFrameworkStores<FinanzasPersonalesContext>();
+            builder.Services.AddIdentityApiEndpoints<Tbfpuser>()
+                .AddEntityFrameworkStores<FinanzasPersonalesContext>();
+
+            // Add the Open API document generation services
+            builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseRouting();
 
             app.UseAuthorization();
 
-
             app.MapControllers();
-
             app.MapFallbackToFile("/index.html");
+
+            app.MapIdentityApi<Tbfpuser>();
+            app.MapStaticAssets();
+            app.MapOpenApi();
+            app.MapScalarApiReference(options =>
+            {
+                options
+                    .WithTitle("SERVER SIDE")
+                    .WithDownloadButton(true)
+                    .WithTheme(ScalarTheme.Purple)
+                    .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios);
+            });
 
             app.Run();
         }

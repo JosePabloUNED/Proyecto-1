@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '8.x' # Use the appropriate version for your project
+        dotnet-version: '9.x' # Use the appropriate version for your project
 
     - name: Install libssl
       run: sudo apt-get install -y libssl-dev
