@@ -1,4 +1,9 @@
 
+using GestionFinanzasPersonales.Server.Models;
+using Microsoft.EntityFrameworkCore;
+
+
+
 namespace GestionFinanzasPersonales.Server
 {
     public class Program
@@ -13,6 +18,11 @@ namespace GestionFinanzasPersonales.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<FinanzasPersonalesContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL"));
+            }); 
+
 
             var app = builder.Build();
 
