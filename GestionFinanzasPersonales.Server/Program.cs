@@ -22,8 +22,20 @@ namespace GestionFinanzasPersonales.Server
             });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddIdentityApiEndpoints<Tbfpuser>()
-                .AddEntityFrameworkStores<FinanzasPersonalesContext>();
+            builder.Services.AddIdentity<Tbfpuser, IdentityRole<int>>()
+                .AddEntityFrameworkStores<FinanzasPersonalesContext>()
+                .AddDefaultTokenProviders();
+
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
             builder.Services.AddOpenApi();
 
@@ -34,28 +46,15 @@ namespace GestionFinanzasPersonales.Server
 
             app.UseRouting();
 
+            // Use CORS policy
+            app.UseCors("AllowAll");
+
+            // Use Authentication and Authorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
             app.MapFallbackToFile("/index.html");
-
-            app.MapIdentityApi<Tbfpuser>();
-
-            app.MapPost("/logout", async (SignInManager<Tbfpuser> signInManager) =>
-            {
-
-                await signInManager.SignOutAsync();
-                return Results.Ok();
-
-            }).RequireAuthorization();
-
-
-            app.MapGet("/pingauth", (ClaimsPrincipal user) =>
-            {
-                var email = user.FindFirstValue(ClaimTypes.Email); // get the user's email from the claim
-                return Results.Json(new { Email = email }); ; // return the email as a plain text response
-            }).RequireAuthorization();
-
 
             app.MapStaticAssets();
             app.MapOpenApi();

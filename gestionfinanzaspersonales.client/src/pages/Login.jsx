@@ -31,15 +31,8 @@ function Login() {
         } else {
             // clear error message
             setError("");
-            // post data to the /register api
-
-            var loginurl = "";
-            if (rememberme == true)
-                loginurl = "/login?useCookies=true";
-            else
-                loginurl = "/login?useSessionCookies=true";
-
-            fetch(loginurl, {
+            // post data to the /account/login api
+            fetch("/account/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -47,19 +40,19 @@ function Login() {
                 body: JSON.stringify({
                     email: email,
                     password: password,
+                    rememberMe: rememberme
                 }),
             })
-
+                .then((response) => response.json())
                 .then((data) => {
                     // handle success or error from the server
                     console.log(data);
-                    if (data.ok) {
+                    if (data.message === "Login successful") {
                         setError("Successful Login.");
                         window.location.href = '/';
-                    }
-                    else
+                    } else {
                         setError("Error Logging In.");
-
+                    }
                 })
                 .catch((error) => {
                     // handle network error
