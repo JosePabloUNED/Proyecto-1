@@ -2,15 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-    // state variables for email and passwords
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberme, setRememberme] = useState(false);
-    // state variable for error messages
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // handle change events for input fields
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "email") setEmail(value);
@@ -20,19 +17,17 @@ function Login() {
 
     const handleRegisterClick = () => {
         navigate("/register");
-    }
+    };
 
-    // handle submit event for the form
     const handleSubmit = (e) => {
         e.preventDefault();
-        // validate email and passwords
         if (!email || !password) {
             setError("Please fill in all fields.");
         } else {
-            // clear error message
             setError("");
-            // post data to the /account/login api
-            fetch("/account/login", {
+             console.log("IM HERE");
+            fetch("http://localhost:5148/api/Account/login", {
+               
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,19 +40,19 @@ function Login() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    // handle success or error from the server
                     console.log(data);
                     if (data.message === "Login successful") {
                         setError("Successful Login.");
-                        window.location.href = '/';
+                        // Store token or set cookie
+                        localStorage.setItem("authToken", data.token);
+                        navigate("/");
                     } else {
-                        setError("Error Logging In.");
+                        setError(data.message || "Error Logging In.");
                     }
                 })
                 .catch((error) => {
-                    // handle network error
                     console.error(error);
-                    setError("Error Logging in.");
+                    setError("Network error. Please try again later.");
                 });
         }
     };

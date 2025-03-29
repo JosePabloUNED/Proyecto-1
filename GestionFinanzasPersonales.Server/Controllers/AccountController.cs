@@ -43,7 +43,7 @@ namespace GestionFinanzasPersonales.Server.Controllers
             return BadRequest(new { Message = "Registration failed", Errors = result.Errors });
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if (!ModelState.IsValid)
@@ -51,14 +51,26 @@ namespace GestionFinanzasPersonales.Server.Controllers
                 return BadRequest(new { Message = "Invalid data", Errors = ModelState });
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-            if (result.Succeeded)
+            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
             {
-                return Ok(new { Message = "Login successful" });
+                return BadRequest(new { Message = "Email and Password cannot be empty" });
             }
 
-            return Unauthorized(new { Message = "Invalid login attempt" });
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "User not found" });
+            }
+
+            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!passwordValid)
+            {
+                return Unauthorized(new { Message = "Invalid password" });
+            }
+
+            // Handle RememberMe logic and other custom logic here
+
+            return Ok(new { Message = "Login successful" });
         }
     }
 

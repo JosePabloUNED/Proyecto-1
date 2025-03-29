@@ -182,7 +182,7 @@ public partial class FinanzasPersonalesContext : DbContext
             entity.ToTable("TBFPUser");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd() // Add this line to set the Id as an identity column
                 .HasColumnName("id_user");
             entity.Property(e => e.DateRegistration)
                 .HasColumnType("datetime")

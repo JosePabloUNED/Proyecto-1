@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 function LogoutLink(props) {
-
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -16,6 +15,8 @@ function LogoutLink(props) {
         })
             .then((data) => {
                 if (data.ok) {
+                    // Clear authentication token
+                    localStorage.removeItem("authToken");
                     navigate("/login");
                 } else {
                     // handle error
