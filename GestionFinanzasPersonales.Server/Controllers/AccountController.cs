@@ -74,13 +74,6 @@ namespace GestionFinanzasPersonales.Server.Controllers
             return Ok(new { Message = "Login successful", Token = token });
         }
 
-        //[Authorize]
-        //[HttpGet("pingauth")]
-        //public IActionResult PingAuth()
-        //{
-        //    var userEmail = User.FindFirstValue(ClaimTypes.Email);
-        //    return Ok(new { email = userEmail });
-        //}
     }
 
     public class RegisterModel
