@@ -1,0 +1,62 @@
+nav {
+    background-color: #124f7d;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-item {
+    width: 100%; /* Ajustado para adaptarse al contenido */
+    display: flex;
+    justify-content: center; /* Centraliza los elementos del menú */
+    padding: 15px 20px; /* Espaciado más manejable */
+    color: white; /* Color inicial del texto */
+    text-decoration: none;
+    text-align: center; /* Centra el texto */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Suaviza la transición */
+    align-items: center;
+}
+
+    .nav-item:hover {
+        color: white; /* Cambia el colordel texto al pasar el mouse */
+        background-color: #2B2A2A; /* Cambia el fondo del enlace */
+    }
+
+    .nav-item::before {
+        z-index: -1;/* Asegura que esté detrás del texto */
+    }
+
+
+    h1 {
+        text-align: center;
+    }
+
+
+.container {
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se alineen verticalmente */
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    width: fit-content; /* Ajusta el ancho del contenedor al contenido */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+}
+
+/* Estilos para la imagen */
+.small-image {
+    width: 100vh; /* Ajusta el ancho de la imagen */
+    height: 60vh; /* Mantén la proporción de la imagen */
+    border: 2px solid #333; /* Opcional: agrega un borde */
+    border-radius: 10px; /* Opcional: agrega bordes redondeados */
+    margin: 20px 0; /* Opcional: agrega margen alrededor de la imagen */
+}
+
+/* Estilos para el texto debajo de la imagen */
+.image-caption {
+    width: 90vh; 
+    height: 50vh;
+    font-size: 1em; /* Tamaño de fuente del texto */
+    color: #fff; /* Color del texto */
+    margin-top: 10px; /* Margen superior para separar el texto de la imagen */
+    text-align: center; /* Centra el texto */
+}
+
