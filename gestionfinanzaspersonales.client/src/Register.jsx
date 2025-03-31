@@ -11,7 +11,7 @@ function Register() {
     const [success, setSuccess] = useState("");
 
     const handleLoginClick = () => {
-        navigate("/login");
+        navigate("/");
     }
 
     const handleChange = (e) => {
@@ -84,7 +84,7 @@ function Register() {
                 if (data.message === "User registered successfully") {
                     setSuccess("Registration successful. Redirecting to login...");
                     setTimeout(() => {
-                        navigate("/login");
+                        navigate("/");
                     }, 2000);
                 } else {
                     setError(data.message || "Error registering.");

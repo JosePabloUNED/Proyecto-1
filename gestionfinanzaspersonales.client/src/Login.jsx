@@ -40,7 +40,7 @@ function Login() {
         .then((data) => {
             if (data.message === "Login successful") {
                 console.log("IM HERE HIII");
-                navigate("/"); // Redirect to home page
+                navigate("/home"); // Redirect to home page
             } else {
                 setError(data.message || "Error Logging In.");
             }
