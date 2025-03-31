@@ -1,6 +1,8 @@
 ﻿using GestionFinanzasPersonales.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GestionFinanzasPersonales.Server.Controllers
@@ -10,12 +12,10 @@ namespace GestionFinanzasPersonales.Server.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<Tbfpuser> _userManager;
-        private readonly SignInManager<Tbfpuser> _signInManager;
 
-        public AccountController(UserManager<Tbfpuser> userManager, SignInManager<Tbfpuser> signInManager)
+        public AccountController(UserManager<Tbfpuser> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         [HttpPost("Register")]
@@ -68,10 +68,19 @@ namespace GestionFinanzasPersonales.Server.Controllers
                 return Unauthorized(new { Message = "Invalid password" });
             }
 
-            // Handle RememberMe logic and other custom logic here
+            // Generate a token (for simplicity, using a dummy token here)
+            var token = "dummy-token";
 
-            return Ok(new { Message = "Login successful" });
+            return Ok(new { Message = "Login successful", Token = token });
         }
+
+        //[Authorize]
+        //[HttpGet("pingauth")]
+        //public IActionResult PingAuth()
+        //{
+        //    var userEmail = User.FindFirstValue(ClaimTypes.Email);
+        //    return Ok(new { email = userEmail });
+        //}
     }
 
     public class RegisterModel
