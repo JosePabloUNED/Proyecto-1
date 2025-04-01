@@ -1,22 +1,33 @@
 ﻿import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer.jsx";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import home from "./assets/home.jpg";
-
-
+import React, { useState, useEffect } from "react";
 
 function Home() {
-
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-
     const [formData, setFormData] = useState({
+        idAccount: "",
         nameAccount: "",
         typeAccount: "",
         initialBalance: 0
     });
+
+    useEffect(() => {
+        // Generate the account ID when the component mounts
+        const generateAccountId = () => {
+            const part1 = Math.floor(1000 + Math.random() * 9000).toString();
+            const part2 = Math.floor(1000 + Math.random() * 9000).toString();
+            return `CR-${part1}-${part2}`;
+        };
+
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            idAccount: generateAccountId()
+        }));
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,7 +40,7 @@ function Home() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!formData.nameAccount || !formData.typeAccount || !formData.initialBalance) {
+        if (!formData.nameAccount || !formData.typeAccount) {
             setError("Please fill out all fields.");
             return;
         }
@@ -55,18 +66,17 @@ function Home() {
             })
             .then((data) => {
                 console.log("API Response:", data);
-                if (data.Message === "Account created successfully") {
-                    navigate("/home"); // Redirect to home page
-                } else {
-                    setError(data.Message || "Error creating account.");
-                }
+               
+                navigate("/home"); // Redirect to home page
+                window.location.reload(); // Refresh the page
+
+                alert("Cuenta registrada exitosamente");
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
                 setError("Network error. Please try again later.");
             });
     };
-
 
     return (
         <div>
@@ -75,14 +85,23 @@ function Home() {
             <div className="container">
                 <img src={home} alt="Gestión de Finanzas" title="Gestión de finanzas personales" className="small-image" />
                 <p className="image-caption">Gestiona tus finanzas personales con nosotros, crea presupuestos y organiza tus ingresos y gastos de forma segura.
-                    Somos la herramienta que estructura sus asuntos personales sencilla y fácilmente. </p>
+                    Somos la herramienta que estructura sus asuntos personales sencilla y fácilmente.
+                </p>
 
-                <br></br> <br></br> 
+                <br></br> <br></br>
 
                 <h2> Registro de cuentas </h2>
 
-
                 <form onSubmit={handleSubmit} className="form-container">
+                    <label>
+                        Account ID:
+                        <input
+                            type="text"
+                            name="idAccount"
+                            value={formData.idAccount}
+                            readOnly
+                        />
+                    </label>
                     <label>
                         Account Name:
                         <input
@@ -113,6 +132,7 @@ function Home() {
                             required
                         />
                     </label>
+
                     <button type="submit">Create Account</button>
                 </form>
                 {error && <p className="error">{error}</p>}
@@ -121,7 +141,6 @@ function Home() {
             <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br>
 
             <Footer />
-
         </div>
     );
 }

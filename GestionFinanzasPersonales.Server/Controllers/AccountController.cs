@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -12,10 +13,12 @@ namespace GestionFinanzasPersonales.Server.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<Tbfpuser> _userManager;
+        private readonly FinanzasPersonalesContext _context;
 
-        public AccountController(UserManager<Tbfpuser> userManager)
+        public AccountController(UserManager<Tbfpuser> userManager, FinanzasPersonalesContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [HttpPost("Register")]
@@ -68,12 +71,66 @@ namespace GestionFinanzasPersonales.Server.Controllers
                 return Unauthorized(new { Message = "Invalid password" });
             }
 
+            UserSession.UserId = user.Id;
+
+
             // Generate a token (for simplicity, using a dummy token here)
             var token = "dummy-token";
 
-            return Ok(new { Message = "Login successful", Token = token });
+            return Ok(new { Message = "Login successful", Token = token, UserId = user.Id });
+
         }
 
+        [HttpPost("CreateAccount")]
+        public async Task<IActionResult> CreateAccount([FromBody] CreateAccountModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid data", Errors = ModelState });
+            }
+
+            var userId = UserSession.UserId;
+
+            if (userId == null)
+            {
+                return Unauthorized(new { Message = "User not authenticated" });
+            }
+
+            // Generate the Account ID in the desired format
+            var accountId = $"CR1-{new Random().Next(1000, 9999)}-{new Random().Next(1000, 9999)}";
+
+            var account = new Tbfpaccount
+            {
+                IdAccount = accountId,
+                IdUser = (int)userId, // Explicit cast from int? to int
+                NameAccount = model.NameAccount,
+                TypeAccount = model.TypeAccount,
+                InitialBalance = model.InitialBalance,
+                DateCreation = DateTime.UtcNow
+            };
+
+            try
+            {
+                _context.Tbfpaccounts.Add(account);
+                await _context.SaveChangesAsync();
+                return Ok(new { Message = "Account created successfully", AccountId = account.IdAccount });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error saving account: {ex.Message}");
+                return StatusCode(500, $"Error saving account: {ex.Message}");
+            }
+        }
+
+
+
+
+    }
+
+    public static class UserSession
+    {
+        public static int? UserId { get; set; }
     }
 
     public class RegisterModel
@@ -81,6 +138,13 @@ namespace GestionFinanzasPersonales.Server.Controllers
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+    }
+
+    public class CreateAccountModel
+    {
+        public string NameAccount { get; set; }
+        public string TypeAccount { get; set; }
+        public decimal InitialBalance { get; set; }
     }
 
     public class LoginModel
