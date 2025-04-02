@@ -1,6 +1,7 @@
 ﻿using GestionFinanzasPersonales.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace GestionFinanzasPersonales.Server.Controllers
 {
@@ -17,7 +18,8 @@ namespace GestionFinanzasPersonales.Server.Controllers
 
         [HttpPost("CreateTransaction")]
         public async Task<IActionResult> CreateTransaction([FromBody] Tbfptransaction transaction)
-        {
+        {       
+
             if (transaction == null)
             {
                 return BadRequest("Datos de transacción inválidos.");
@@ -63,5 +65,31 @@ namespace GestionFinanzasPersonales.Server.Controllers
                 return StatusCode(500, $"Error al obtener las transacciones: {ex.Message}");
             }
         }
+
+        [HttpGet("GetUserAccounts/{userId}")]
+        public async Task<IActionResult> GetUserAccounts(int userId)
+        {
+            var accounts = await _dbContext.Tbfpaccounts.Where(a => a.IdUser == userId).ToListAsync();
+            if (accounts == null || !accounts.Any())
+            {
+                return NotFound("No accounts found for this user.");
+            }
+            return Ok(accounts);
+        }
+
+
+        [HttpGet("GetCategory")]
+        public async Task<IActionResult> GetCategory()
+        {
+            var cat = await _dbContext.Tbfpcategories.ToListAsync();
+            if (cat == null || !cat.Any())
+            {
+                return NotFound("No categories found for this user.");
+            }
+            return Ok(cat);
+        }
+
+
+
     }
 }

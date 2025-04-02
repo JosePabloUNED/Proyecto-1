@@ -40,6 +40,8 @@ function Login() {
         .then((data) => {
             if (data.message === "Login successful") {
                 console.log("IM HERE HIII");
+                localStorage.setItem('userId', data.userId);
+
                 navigate("/home"); // Redirect to home page
             } else {
                 setError(data.message || "Error Logging In.");

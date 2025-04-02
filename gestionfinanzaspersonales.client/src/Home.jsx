@@ -94,7 +94,7 @@ function Home() {
 
                 <form onSubmit={handleSubmit} className="form-container">
                     <label>
-                        Account ID:
+                        Número de cuenta::
                         <input
                             type="text"
                             name="idAccount"
@@ -103,7 +103,7 @@ function Home() {
                         />
                     </label>
                     <label>
-                        Account Name:
+                        Nombre de la cuenta:
                         <input
                             type="text"
                             name="nameAccount"
@@ -113,23 +113,29 @@ function Home() {
                         />
                     </label>
                     <label>
-                        Account Type:
-                        <input
-                            type="text"
+                        Tipo de cuenta:
+                        <select
                             name="typeAccount"
                             value={formData.typeAccount}
                             onChange={handleChange}
-                            required
-                        />
+                        >
+                            <option value="">Selecciona una categoría</option>
+                            <option value="Ahorros">Ahorros</option>
+                            <option value="Corriente">Corriente</option>
+                            <option value="Crédito">Crédito</option>
+                            <option value="Inversión">Inversión</option>
+                        </select>
                     </label>
+
                     <label>
-                        Initial Balance:
+                        Balance inicial:
                         <input
                             type="number"
                             name="initialBalance"
                             value={formData.initialBalance}
                             onChange={handleChange}
-                            required
+                            readOnly
+
                         />
                     </label>
 

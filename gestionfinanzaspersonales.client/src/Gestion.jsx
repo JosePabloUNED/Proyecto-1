@@ -4,18 +4,20 @@ import { useNavigate } from "react-router-dom";
 import gestion from "./assets/gestion.jpg";
 import Footer from "./components/Footer.jsx";
 
-function Panel() {
-
+function Gestion() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [accounts, setAccounts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
 
     const [formData, setFormData] = useState({
-        tipo: "Ingreso",
+        tipo: "",
         categoria: "",
         monto: "",
         fecha: "",
-        descripcion: ""
+        descripcion: "",
+        accountId: ""
     });
 
     // Obtener la fecha y hora actuales al cargar el componente
@@ -27,6 +29,52 @@ function Panel() {
             fecha: formattedDate
         }));
     }, []);
+
+
+    // Fetch user accounts
+    useEffect(() => {
+        const userId = localStorage.getItem('userId'); // Retrieve userId from local storage
+        if (userId) {
+            fetch(`http://localhost:5148/api/Transaction/GetUserAccounts/${userId}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setAccounts(data);
+                })
+                .catch((error) => {
+                    console.error("Fetch error:", error);
+                    setError("Network error. Please try again later.");
+                });
+        } else {
+            setError("User not logged in.");
+            navigate('/login'); // Redirect to login page if userId is not found
+        }
+    }, [navigate]);
+
+
+
+    // Fetch categories
+    useEffect(() => {
+        fetch(`http://localhost:5148/api/Transaction/GetCategory`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setCategories(data);
+            })
+            .catch((error) => {
+                console.error("Fetch error:", error);
+                setError("Network error. Please try again later.");
+            });
+    }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,7 +88,7 @@ function Panel() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!formData.tipo || !formData.categoria || !formData.monto || !formData.fecha || !formData.descripcion) {
+        if (!formData.tipo || !formData.categoria || !formData.monto || !formData.fecha || !formData.descripcion || !formData.accountId) {
             setError("Please fill out this field.");
             return;
         }
@@ -53,15 +101,18 @@ function Panel() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                IdAccount: "some-account-id", // Replace with actual account ID
+                IdAccount: formData.accountId,
                 Type: formData.tipo,
                 IdCategory: parseInt(formData.categoria), // Ensure this is an integer
                 Amount: parseFloat(formData.monto),
                 DateTransaction: formData.fecha,
                 Description: formData.descripcion
+
             }),
         })
             .then((response) => {
+                console.log("HII DEBUGGER");
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -69,17 +120,13 @@ function Panel() {
             })
             .then((data) => {
                 console.log("API Response:", data);
-                if (data === "Transacción registrada exitosamente.") {
-                    navigate("/home"); // Redirect to Gestion page
-                } else {
-                    setError(data || "Error saving data.");
-                    alert("ERROR: " + data);
-                }
+                navigate("/gestion"); // Redirect to home page
+                window.location.reload(); // Refresh the page                
+                alert("Transacción registrada exitosamente");
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
                 setError("Network error. Please try again later.");
-
             });
     };
 
@@ -102,13 +149,28 @@ function Panel() {
 
                 <h2> Registro de ingresos y gastos </h2>
 
-
                 <form onSubmit={handleSubmit} className="form-container">
                     <label>
                         Tipo de Transacción:
                         <select name="tipo" value={formData.tipo} onChange={handleChange}>
                             <option value="Ingreso">Ingreso</option>
                             <option value="Gasto">Gasto</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Cuenta:
+                        <select
+                            name="accountId"
+                            value={formData.accountId}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecciona una cuenta</option>
+                            {accounts.map((account) => (
+                                <option key={account.idAccount} value={account.idAccount}> {account.idAccount} {' - '}
+                                    {account.nameAccount} {' - '} {account.typeAccount}
+                                </option>
+                            ))}
                         </select>
                     </label>
 
@@ -120,10 +182,12 @@ function Panel() {
                             onChange={handleChange}
                         >
                             <option value="">Selecciona una categoría</option>
-                            <option value="Salario">Salario</option>
-                            <option value="Alquiler">Alquiler</option>
-                            <option value="Comida">Comida</option>
-                            <option value="Entretenimiento">Entretenimiento</option>
+                            {categories.map((category) => (
+                                <option key={category.idCategory} value={category.idCategory}>
+                                    {category.nameCategory}
+                                </option>
+                            ))}
+
                         </select>
                     </label>
 
@@ -161,18 +225,15 @@ function Panel() {
                     </label>
 
                     <button type="submit">Registrar</button>
-
                 </form>
                 {error && <p className="error">{error}</p>}
-
             </div>
 
             <br></br> <br></br> <br></br> <br></br> <br></br>
 
             <Footer />
-
         </div>
     );
 }
 
-export default Panel;
+export default Gestion;
