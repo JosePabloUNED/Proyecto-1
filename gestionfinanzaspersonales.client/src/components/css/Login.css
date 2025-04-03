@@ -3,7 +3,7 @@
 }
 
 .container-forms {
-    background: rgba($form-bg,.9);
+    background: rgb(86, 110, 186);
     padding: 40px;
     max-width: 60vh;
     margin: 40px auto;
@@ -65,6 +65,8 @@ li a {
 
 
 label {
+   
+    top: 10px;
     position: absolute;
     transform: translateY(6px);
     left: 13px;
@@ -123,89 +125,44 @@ input {
 
 }
 
+
+
 .container-input {
     position: relative;
     margin-bottom: 40px;
 }
 
-.fila-arriba {
-    &:after
-
-{
-    content: "";
-    display: table;
-    clear: both;
+label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: rgba($blanco, .5);
+    transition: all 0.25s ease;
+    pointer-events: none;
+    font-size: 22px;
 }
 
-div {
-    float: left;
-    width: 48%;
-    margin-right: 4%;
-    &:last-child
-
-{
-    margin: 0;
-}
-
-}
-}
-
-.button {
-    border: 0;
-    outline: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 15px 0;
-    font-size: 2rem;
-    background: $color-principal;
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: 40px; /* Adjust this value as needed */
+    left: 10px;
+    font-size: 14px;
     color: $blanco;
-    transition: all .5s ease;
-    -webkit-appearance: none;
-    &:hover, &:focus
-
-{
-    background: $color-principal-dark;
 }
 
-}
-
-.button-block {
+input {
+    font-size: 22px;
     display: block;
     width: 100%;
+    padding: 10px;
+    background: none;
+    border: 1px solid $gris-light;
+    color: $blanco;
+    border-radius: 5px;
+    transition: all 0.5s ease;
 }
 
-.forgot {
-    margin-top: -20px;
-    text-align: right;
-    margin-bottom: 20px;
-}
-
-// Mediaqueries
-@media screen and (max-width: 500px) {
-    .fila-arriba
-
-{
-    div
-
-{
-    width: 100%;
-    &:last-child
-
-{
-    margin-bottom: 40px;
-}
-
-}
-}
-}
-
-@media screen and (max-width: 400px) {
-    .contenedor-tabs {
-        li a
-
-{
-    width: 100%;
-}
-
-}
-}
+    input:focus {
+        outline: none;
+        border-color: $color-principal;
+    }
