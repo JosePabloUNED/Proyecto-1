@@ -1,7 +1,11 @@
 ﻿using GestionFinanzasPersonales.Server.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
 
 namespace GestionFinanzasPersonales.Server.Controllers
 {
@@ -17,39 +21,38 @@ namespace GestionFinanzasPersonales.Server.Controllers
         }
 
         [HttpPost("CreateTransaction")]
-        public async Task<IActionResult> CreateTransaction([FromBody] Tbfptransaction transaction)
-        {       
-
-            if (transaction == null)
+        public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Datos de transacción inválidos.");
+                return BadRequest(new { Message = "Invalid data", Errors = ModelState });
             }
 
-            // Validaciones adicionales si es necesario
-            if (transaction.Amount <= 0)
+            var tran = new Tbfptransaction
             {
-                return BadRequest("El monto debe ser mayor a cero.");
-            }
-
-            // Set the current date and time for the transaction
-            transaction.DateTransaction = DateTime.Now;
+                IdAccount = model.IdAccount,
+                TypeTran = model.TypeTran, // Updated from TypeAccount
+                IdCategory = model.IdCategory,
+                Amount = model.Amount,
+                DateTransaction = DateTime.UtcNow,
+                DescriptionTran = model.DescriptionTran // Updated from Description
+            };
 
             try
             {
-                _dbContext.Add(transaction);
+                _dbContext.Tbfptransactions.Add(tran);
                 await _dbContext.SaveChangesAsync();
-                return Ok("Transacción registrada exitosamente.");
+                return Ok(new { Message = "Transaction created successfully" });
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"Error al guardar la transacción: {ex.Message}");
-                return StatusCode(500, $"Error al guardar la transacción: {ex.Message}");
+                
+                return StatusCode(500, $"Error saving transaction: {ex.Message}");
             }
         }
 
-        // GET: api/Transaction
-        [HttpGet("GetTransactions")]
+            // GET: api/Transaction
+            [HttpGet("GetTransactions")]
         public async Task<IActionResult> GetTransactions()
         {
             try
@@ -87,6 +90,16 @@ namespace GestionFinanzasPersonales.Server.Controllers
                 return NotFound("No categories found for this user.");
             }
             return Ok(cat);
+        }
+
+
+        public class CreateTransactionModel
+        {
+            public string IdAccount { get; set; }
+            public string TypeTran { get; set; } // Updated from TypeAccount
+            public int IdCategory { get; set; }
+            public decimal Amount { get; set; }
+            public string DescriptionTran { get; set; } // Updated from Description
         }
 
 

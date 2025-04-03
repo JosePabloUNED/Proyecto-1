@@ -150,19 +150,19 @@ public partial class FinanzasPersonalesContext : DbContext
             entity.Property(e => e.DateTransaction)
                 .HasColumnType("datetime")
                 .HasColumnName("date_transaction");
-            entity.Property(e => e.Description)
+            entity.Property(e => e.DescriptionTran) // Updated from Description
                 .HasMaxLength(100)
                 .IsUnicode(false)
-                .HasColumnName("description");
+                .HasColumnName("description_tran");
             entity.Property(e => e.IdAccount)
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("id_account");
             entity.Property(e => e.IdCategory).HasColumnName("id_category");
-            entity.Property(e => e.Type)
+            entity.Property(e => e.TypeTran) // Updated from Type
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("type");
+                .HasColumnName("type_tran");
 
             entity.HasOne(d => d.IdAccountNavigation).WithMany(p => p.Tbfptransactions)
                 .HasForeignKey(d => d.IdAccount)

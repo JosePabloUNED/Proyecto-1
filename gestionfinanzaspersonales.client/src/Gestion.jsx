@@ -15,18 +15,18 @@ function Gestion() {
         tipo: "",
         categoria: "",
         monto: "",
-        fecha: "",
+        // fecha: "",
         descripcion: "",
         accountId: ""
     });
 
     // Obtener la fecha y hora actuales al cargar el componente
     useEffect(() => {
-        const currentDate = new Date();
-        const formattedDate = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
+        //   const currentDate = new Date();
+        // const formattedDate = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
         setFormData((prevState) => ({
             ...prevState,
-            fecha: formattedDate
+            //            fecha: formattedDate
         }));
     }, []);
 
@@ -88,12 +88,12 @@ function Gestion() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!formData.tipo || !formData.categoria || !formData.monto || !formData.fecha || !formData.descripcion || !formData.accountId) {
+        if (!formData.tipo || !formData.categoria || !formData.monto || !formData.descripcion || !formData.accountId) {
             setError("Please fill out this field.");
             return;
         }
 
-        setError("");
+        // setError("LOOKS LIKE THERE'S AN ERROR IN HERE");
 
         fetch("http://localhost:5148/api/Transaction/CreateTransaction", {
             method: "POST",
@@ -103,19 +103,20 @@ function Gestion() {
             body: JSON.stringify({
                 IdAccount: formData.accountId,
                 Type: formData.tipo,
-                IdCategory: parseInt(formData.categoria), // Ensure this is an integer
+                IdCategory: parseInt(formData.categoria),
                 Amount: parseFloat(formData.monto),
-                DateTransaction: formData.fecha,
                 Description: formData.descripcion
-
             }),
         })
             .then((response) => {
-                console.log("HII DEBUGGER");
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                //if (!response.ok) {
+                //    throw new Error(`HTTP error! status: ${response.status}`);
+
+                //}
+
+                console.log(formData);
+
                 return response.json();
             })
             .then((data) => {
@@ -153,6 +154,7 @@ function Gestion() {
                     <label>
                         Tipo de Transacción:
                         <select name="tipo" value={formData.tipo} onChange={handleChange}>
+                            <option value="">Selecciona una transacción</option>
                             <option value="Ingreso">Ingreso</option>
                             <option value="Gasto">Gasto</option>
                         </select>
@@ -203,15 +205,15 @@ function Gestion() {
                         />
                     </label>
 
-                    <label>
-                        Fecha y Hora:
-                        <input
-                            type="text"
-                            name="fecha"
-                            value={formData.fecha}
-                            readOnly
-                        />
-                    </label>
+                    {/*<label>*/}
+                    {/*    Fecha y Hora:*/}
+                    {/*    <input*/}
+                    {/*        type="text"*/}
+                    {/*        name="fecha"*/}
+                    {/*        value={formData.fecha}*/}
+                    {/*        readOnly*/}
+                    {/*    />*/}
+                    {/*</label>*/}
 
                     <label>
                         Descripción:
