@@ -1,3 +1,4 @@
+﻿import "./components/css/Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -98,11 +99,11 @@ function Register() {
     };
 
     return (
-        <div className="containerbox">
-            <h3>Register</h3>
+        <div className="container-forms">
+            <h3>Registro de usuarios</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email">Correo:</label>
                 </div>
                 <div>
                     <input
@@ -114,7 +115,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="userName">User Name:</label>
+                    <label htmlFor="userName">Nombre de usuario:</label>
                 </div>
                 <div>
                     <input
@@ -126,7 +127,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Contraseña:</label>
                 </div>
                 <div>
                     <input
@@ -138,7 +139,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <label htmlFor="confirmPassword">Confirme contraseña:</label>
                 </div>
                 <div>
                     <input
@@ -149,11 +150,11 @@ function Register() {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
-                    <button type="submit">Register</button>
-                </div>
-                <div>
-                    <button type="button" onClick={handleLoginClick}>Go to Login</button>
+                <br></br>
+                <div className="button-container">
+                    <button type="submit">Registrarse</button>
+               
+                    <button type="button" onClick={handleLoginClick}>Inciar sesión</button>
                 </div>
             </form>
             {error && <p className="error">{error}</p>}

@@ -80,7 +80,7 @@ function Login() {
                         onChange={handleChange}
                         placeholder=" " /* Add placeholder to trigger CSS */
                     />
-                    <label htmlFor="password">Contraseña</label>
+                    <label className="label_" htmlFor="password">Contraseña <span className="req">*</span></label>
                 </div>
                 <div className="button-container">
                     <button type="submit">Iniciar sesión</button>
