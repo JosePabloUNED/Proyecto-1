@@ -20,10 +20,6 @@ function App() {
             <Route path="/panel" element={<Panel />} />
             <Route path="/gestion" element={<Gestion />} />
             <Route path="/presupuestos" element={<Presupuestos />} />
-
-
-
-
         </Routes>
     );
 

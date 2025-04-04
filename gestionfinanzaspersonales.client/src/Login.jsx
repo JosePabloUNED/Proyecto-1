@@ -1,4 +1,4 @@
-﻿//import styles from "./components/css/Login.module.css";
+﻿import "./components/css/Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -56,38 +56,38 @@ function Login() {
     };
 
     return (
-        <div className={styles["container-forms"]}>
+        <div className="container-forms">
             <h2>Sistema Gestor de Finanzas Personales</h2>
             <h3>Incio de sesión</h3>
             <form onSubmit={handleSubmit}>
-                <div className={styles["container-input"]}>
-                    <input
+                <div className="container-input">
+                    <input className="input_"
                         type="email"
                         id="email"
                         name="email"
                         value={email}
                         onChange={handleChange}
-                        placeholder=" "
+                        placeholder=" " 
                     />
-                    <label htmlFor="email">Correo <span className={styles["req"]}>*</span></label>
+                    <label htmlFor="email" className="label_">Correo <span className="req">*</span></label>
                 </div>
-                <div className={styles["container-input"]}>
+                <div className="container-input">
                     <input
                         type="password"
                         id="password"
                         name="password"
                         value={password}
                         onChange={handleChange}
-                        placeholder=" "
+                        placeholder=" " /* Add placeholder to trigger CSS */
                     />
-                    <label htmlFor="password">Contraseña  <span className={styles["req"]}>*</span></label>
+                    <label htmlFor="password">Contraseña</label>
                 </div>
-                <div className={styles["button-container"]}>
+                <div className="button-container">
                     <button type="submit">Iniciar sesión</button>
                     <button type="button" onClick={handleRegisterClick}>Registrarse</button>
                 </div>
             </form>
-            {error && <p className={styles["error"]}>{error}</p>}
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

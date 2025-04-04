@@ -64,7 +64,7 @@ li a {
 
 
 
-label {
+/*label_ {
    
     top: 10px;
     position: absolute;
@@ -84,7 +84,7 @@ label {
 
 }
 
-label.active {
+label_.active {
     transform: translateY(50px);
     left: 2px;
     font-size: 14px;
@@ -96,7 +96,7 @@ label.active {
 
 }
 
-label.highlight {
+label_.highlight {
     color: $blanco;
 }
 
@@ -144,8 +144,8 @@ label {
 
 input:focus + label,
 input:not(:placeholder-shown) + label {
-    top: 40px; /* Adjust this value as needed */
-    left: 10px;
+    top: 40px;*/ /* Adjust this value as needed */
+    /*left: 10px;
     font-size: 14px;
     color: $blanco;
 }
@@ -165,4 +165,4 @@ input {
     input:focus {
         outline: none;
         border-color: $color-principal;
-    }
+    }*/
