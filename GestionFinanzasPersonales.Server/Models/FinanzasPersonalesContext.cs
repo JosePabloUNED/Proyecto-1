@@ -72,7 +72,7 @@ public partial class FinanzasPersonalesContext : DbContext
             entity.ToTable("TBFPBudget");
 
             entity.Property(e => e.IdBudget)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd() // Change this line to set IdBudget as an identity column
                 .HasColumnName("id_budget");
             entity.Property(e => e.Amount)
                 .HasColumnType("money")

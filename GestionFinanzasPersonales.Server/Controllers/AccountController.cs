@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static GestionFinanzasPersonales.Server.Controllers.BudgetController;
 
 namespace GestionFinanzasPersonales.Server.Controllers
 {
@@ -102,7 +103,7 @@ namespace GestionFinanzasPersonales.Server.Controllers
             var account = new Tbfpaccount
             {
                 IdAccount = accountId,
-                IdUser = (int)userId, // Explicit cast from int? to int
+                IdUser = (int)userId, 
                 NameAccount = model.NameAccount,
                 TypeAccount = model.TypeAccount,
                 InitialBalance = model.InitialBalance,
@@ -124,8 +125,44 @@ namespace GestionFinanzasPersonales.Server.Controllers
         }
 
 
+        [HttpPost("CreateBudget")]
+        public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid data", Errors = ModelState });
+            }
+
+            var userId = UserSession.UserId;
+
+            if (userId == null)
+            {
+                return Unauthorized(new { Message = "User not authenticated" });
+            }
 
 
+            var budget = new Tbfpbudget
+            {
+                IdUser = (int)userId, 
+                IdCategory = model.IdCategory,
+                Period = model.Period,
+                Amount = model.Amount
+            };
+
+          
+                _context.Tbfpbudgets.Add(budget);
+                await _context.SaveChangesAsync();
+                return Ok(new { Message = "Budget created successfully", BudgetId = budget.IdBudget });
+            
+           
+        }
+    }
+
+    public class CreateBudgetModel
+    {
+        public int IdCategory { get; set; }
+        public string Period { get; set; }
+        public decimal Amount { get; set; }
     }
 
     public static class UserSession

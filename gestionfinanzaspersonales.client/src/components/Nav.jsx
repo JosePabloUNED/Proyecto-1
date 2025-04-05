@@ -9,7 +9,7 @@ function Nav() {
                 <Link to="/home" className="nav-item">Inicio</Link>
                 <Link to="/panel" className="nav-item">Panel de control</Link>
                 <Link to="/gestion" className="nav-item">Ingresos y gastos</Link>
-                <Link to="/presupuestos" className="nav-item">Presupuestos</Link>
+                <Link to="/budget" className="nav-item">Presupuestos</Link>
             </nav>
           
         </>

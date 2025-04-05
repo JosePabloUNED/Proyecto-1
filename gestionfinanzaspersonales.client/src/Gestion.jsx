@@ -110,10 +110,10 @@ function Gestion() {
         })
             .then((response) => {
 
-                //if (!response.ok) {
-                //    throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
 
-                //}
+                }
 
                 console.log(formData);
 

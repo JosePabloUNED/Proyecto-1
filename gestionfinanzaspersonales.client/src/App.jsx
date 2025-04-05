@@ -6,7 +6,7 @@ import Login from './Login.jsx';
 import Register from './Register.jsx';
 import Panel from './Panel.jsx';
 import Gestion from './Gestion.jsx';
-import Presupuestos from './Presupuestos.jsx';
+import Budget from './Budget.jsx';
 
 
 
@@ -19,7 +19,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/panel" element={<Panel />} />
             <Route path="/gestion" element={<Gestion />} />
-            <Route path="/presupuestos" element={<Presupuestos />} />
+            <Route path="/budget" element={<Budget />} />
         </Routes>
     );
 
