@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static GestionFinanzasPersonales.Server.Controllers.BudgetController;
+using static GestionFinanzasPersonales.Server.Controllers.TransactionController;
 
 namespace GestionFinanzasPersonales.Server.Controllers
 {
@@ -152,11 +153,66 @@ namespace GestionFinanzasPersonales.Server.Controllers
           
                 _context.Tbfpbudgets.Add(budget);
                 await _context.SaveChangesAsync();
-                return Ok(new { Message = "Budget created successfully", BudgetId = budget.IdBudget });
-            
-           
+                return Ok(new { Message = "Budget created successfully", BudgetId = budget.IdBudget });                  
+        }
+
+
+        [HttpPost("CreateTransaction")]
+        public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid data", Errors = ModelState });
+            }
+
+            var tran = new Tbfptransaction
+            {
+                IdAccount = model.IdAccount,
+                TypeTran = model.TypeTran, // Updated from TypeAccount
+                IdCategory = model.IdCategory,
+                Amount = model.Amount,
+                DateTransaction = DateTime.UtcNow,
+                DescriptionTran = model.DescriptionTran // Updated from Description
+            };
+
+            try
+            {
+                _context.Tbfptransactions.Add(tran);
+                await _context.SaveChangesAsync();
+                return Ok(new { Message = "Transaction created successfully" });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Error saving transaction: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet("GetUserAccounts/{userId}")]
+        public async Task<IActionResult> GetUserAccounts(int userId)
+        {
+            var accounts = await _context.Tbfpaccounts.Where(a => a.IdUser == userId).ToListAsync();
+            return Ok(accounts);
+        }
+
+        [HttpGet("GetCategories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _context.Tbfpcategories.ToListAsync();
+            return Ok(categories);
         }
     }
+
+    public class CreateTransactionModel
+    {
+        public string IdAccount { get; set; }
+        public string TypeTran { get; set; } // Updated from TypeAccount
+        public int IdCategory { get; set; }
+        public decimal Amount { get; set; }
+        public string DescriptionTran { get; set; } // Updated from Description
+    }
+
 
     public class CreateBudgetModel
     {

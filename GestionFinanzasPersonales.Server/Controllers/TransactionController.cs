@@ -103,6 +103,14 @@ namespace GestionFinanzasPersonales.Server.Controllers
         }
 
 
-
     }
-}
+
+    //[HttpGet("GetUserTransactions/{userId}")]
+    //    public async Task<IActionResult> GetUserTransactions(int userId)
+    //    {
+    //        var transactions = await _context.Tbfptransactions
+    //            .Where(t => t.IdAccountNavigation.IdUser == userId)
+    //            .ToListAsync();
+    //        return Ok(transactions);
+    //    }
+    }

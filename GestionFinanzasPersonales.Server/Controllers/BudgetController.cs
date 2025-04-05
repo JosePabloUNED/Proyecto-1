@@ -69,5 +69,13 @@ namespace GestionFinanzasPersonales.Server.Controllers
             public string Period { get; set; }
             public decimal Amount { get; set; }
         }
+
+        [HttpGet("GetUserBudgets/{userId}")]
+        public async Task<IActionResult> GetUserBudgets(int userId)
+        {
+            var budgets = await _context.Tbfpbudgets.Where(b => b.IdUser == userId).ToListAsync();
+            return Ok(budgets);
+        }
     }
+
 }

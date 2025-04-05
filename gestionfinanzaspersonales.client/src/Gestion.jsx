@@ -95,7 +95,7 @@ function Gestion() {
 
         // setError("LOOKS LIKE THERE'S AN ERROR IN HERE");
 
-        fetch("http://localhost:5148/api/Transaction/CreateTransaction", {
+        fetch("http://localhost:5148/api/Account/CreateTransaction", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -142,7 +142,7 @@ public partial class FinanzasPersonalesContext : DbContext
             entity.ToTable("TBFPTransaction");
 
             entity.Property(e => e.IdTransaction)
-                .ValueGeneratedNever()
+        .ValueGeneratedOnAdd()
                 .HasColumnName("id_transaction");
             entity.Property(e => e.Amount)
                 .HasColumnType("money")
